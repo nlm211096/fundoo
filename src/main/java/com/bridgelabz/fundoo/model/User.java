@@ -2,32 +2,44 @@ package com.bridgelabz.fundoo.model;
 
 import java.time.LocalDateTime;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
+@Table
 public class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "id",unique=true ,nullable = false)
 	private long id;
 	
+	@Column(name = "firstname",nullable = false)
 	private String firstname;
 	
+	@Column(name = "lastname",nullable = false)
 	private String lastname;
 	
+	@Column(name = "email",unique=true ,nullable = false)
 	private String email;
 	
+	@Column(name = "phone",nullable = false)
 	private Long phone;
 	
+	@Column(name = "password",nullable = false)
 	private String password;
 	
+	@Column(name = "isVarified",nullable = false)
 	private boolean isVarified;
 	
+	@Column(name = "createdStamp",nullable = false)
 	private LocalDateTime createdStamp;
 	
+	@Column(name = "updatedStamp",nullable = false)
 	private LocalDateTime updatedStamp;
 
 	public long getId() {
@@ -78,7 +90,8 @@ public class User {
 		this.password = password;
 	}
 
-	public boolean isVarified() {
+	public boolean isVarified()
+	{
 		return isVarified;
 	}
 
@@ -101,9 +114,5 @@ public class User {
 	public void setUpdatedStamp(LocalDateTime updatedStamp) {
 		this.updatedStamp = updatedStamp;
 	}
-	
-	
-
-	
 
 }

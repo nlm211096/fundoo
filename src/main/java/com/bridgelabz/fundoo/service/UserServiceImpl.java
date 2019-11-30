@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
+import com.bridgelabz.fundoo.dto.LoginDto;
 import com.bridgelabz.fundoo.dto.RegistrationDTO;
 import com.bridgelabz.fundoo.model.User;
 import com.bridgelabz.fundoo.repo.UserRepo;
@@ -43,6 +44,23 @@ public class UserServiceImpl  implements UserService{
 		return user;
     	
     }
+
+	@Override
+	public boolean login(LoginDto loginDto)
+	{
+		User user=new User();
+		System.out.println(loginDto.getEmailId()+loginDto.getEmailId());
+		user.setEmail(loginDto.getEmailId());
+		user.setPassword(loginDto.getPassword());
+		User result=userRepo.checkValidation(user);
+		if(result!=null)
+		{
+			return true;
+			
+		}
+		
+		return false;
+	}
    
 	
 	
