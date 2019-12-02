@@ -26,11 +26,7 @@ public class UserRepoImpl implements UserRepo {
 		Integer status=0;
 		Session session = entitymanager.unwrap(Session.class);
 	    session.save(user);
-//	    if(status!=0)
-//	    {
-//	    	return user;
-//	    }
-//		return null;
+   
 	    return user;
 
 	}
@@ -42,13 +38,15 @@ public class UserRepoImpl implements UserRepo {
 		  return userList;
 		 }
 
+	 
+	 
 	@Override
 	public User checkValidation(User user) {
 	
 		List<User> users=findAll();
 		for(User userss:users)
 		{
-			if((userss.getEmail()).equals(user.getEmail()))
+			if((userss.getEmail()).equals(user.getEmail())&&userss.getPassword().equals(user.getPassword()))
 			{
 				return user;
 			}

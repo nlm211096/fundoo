@@ -9,5 +9,7 @@ public interface UserService {
 	public boolean registration(RegistrationDTO registrationDTO);
 	
 	public boolean login(LoginDto loginDto);
+	
+	
 
 }

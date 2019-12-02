@@ -26,10 +26,12 @@ public class UserController {
 	@PostMapping("/register")
 	public ResponseEntity<Response> register(@Valid @RequestBody RegistrationDTO registrationDTO){
 		if(userService.registration(registrationDTO))
-		{
-			return new ResponseEntity<Response>( new Response(HttpStatus.OK.value(),"success"),HttpStatus.OK);
+		{   
+			registrationDTO.setPassword("**********");
+			return new ResponseEntity<Response>( new Response(HttpStatus.OK.value(), "Successfully"),HttpStatus.OK);
+		}			
 			
-		}
+			
 		return new ResponseEntity<Response>( new Response(HttpStatus.BAD_REQUEST.value(),"success"),HttpStatus.BAD_REQUEST);
 
 			
@@ -46,7 +48,6 @@ public class UserController {
 		}
 		return new ResponseEntity<Response>( new Response(HttpStatus.BAD_REQUEST.value(),"unsuccess"),HttpStatus.BAD_REQUEST);
 
-		
 		
 		
 	}
