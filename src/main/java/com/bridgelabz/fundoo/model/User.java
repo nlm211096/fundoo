@@ -33,9 +33,17 @@ public class User {
 	@Column(name = "password",nullable = false)
 	private String password;
 	
-	@Column(name = "isVarified",nullable = false)
-	private boolean isVarified;
+	@Column(name = "isVarified")
+	private Boolean isVarified;
 	
+	public Boolean isVarified() {
+		return isVarified;
+	}
+
+	public void setVarified(Boolean isVarified) {
+		this.isVarified = isVarified;
+	}
+
 	@Column(name = "createdStamp",nullable = false)
 	private LocalDateTime createdStamp;
 	
@@ -90,14 +98,7 @@ public class User {
 		this.password = password;
 	}
 
-	public boolean isVarified()
-	{
-		return isVarified;
-	}
-
-	public void setVarified(boolean isVarified) {
-		this.isVarified = isVarified;
-	}
+	
 
 	public LocalDateTime getCreatedStamp() {
 		return createdStamp;

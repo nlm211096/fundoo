@@ -10,6 +10,10 @@ public interface UserService {
 	
 	public boolean login(LoginDto loginDto);
 	
+	public boolean verify(String token);
+	public boolean validEmailId(String emailid);
+	public boolean resetPassword(String password,String email);
+	
 	
 
 }

@@ -23,10 +23,11 @@ public class UserRepoImpl implements UserRepo {
 
 	@Override
 	public User save(User user) {
-		Integer status=0;
 		Session session = entitymanager.unwrap(Session.class);
 	    session.save(user);
-   
+        System.out.println("hi dao");
+         System.out.println(user.isVarified());
+         
 	    return user;
 
 	}
