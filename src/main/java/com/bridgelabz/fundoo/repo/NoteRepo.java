@@ -9,6 +9,7 @@ public interface NoteRepo {
 	public boolean saveNote(Note note);
 	public List<Note>   findAll();
 	public boolean deleteNote(long id);
-	public boolean updateSave(Note note);
+	
+	public boolean updateSave(long id,Note note) ;
 
 }

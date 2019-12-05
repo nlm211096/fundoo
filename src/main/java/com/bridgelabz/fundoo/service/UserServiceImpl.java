@@ -34,6 +34,11 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public boolean registration(RegistrationDTO registrationDTO) {
 		User user = registrationDTOToUser(registrationDTO);
+		boolean isPresentEmail=validEmailId(user.getEmail());
+		if(isPresentEmail)
+		{
+			return false;
+		}
 		String url = "http://localhost:8080/user/verification/";
 		User userObj = userRepo.save(user);
 		if (userObj != null) {
@@ -115,8 +120,14 @@ public class UserServiceImpl implements UserService {
 		for (User user : users) {
 			if(user.getEmail().equals(emailId))
 			{   
-				String url="http://localhost:8080/user/resetpassword/";
-				mailServiceProvider.sendEmail(emailId, "for update password", url);
+				
+				
+				String token = provider.generateToken(emailId);
+
+				String url="http://localhost:8080/user/reSetPassword/";
+				mailServiceProvider.sendEmail(emailId, "for update password", url + token);
+
+				
 				return true;
 				
 			}
@@ -128,13 +139,14 @@ public class UserServiceImpl implements UserService {
     
 	
 	@Override
-	public boolean resetPassword(String password,String email) {
-		
+	public boolean resetPassword(String password,String token) {
+		System.out.println(token);
+		String paresedTokenEmail = provider.parseToken(token);
 		List<User> users = userRepo.findAll();
 		for (User user : users) {
-			if(user.getEmail().equals(email))
+			if(user.getEmail().equals(paresedTokenEmail))
 			{
-			 user.setPassword(password);
+			 user.setPassword(encryptPassword(password));
 			 userRepo.save(user);
 			 return true;
 			}

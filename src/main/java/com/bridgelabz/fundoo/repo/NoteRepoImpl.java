@@ -85,12 +85,11 @@ public class NoteRepoImpl implements NoteRepo {
 	@Override
 	public boolean updateSave(long id,Note note) {
 		 Session session=entityManager.unwrap(Session.class);
-		 List<Note> notelist=findAll();
-		 for(Note noteObj:notelist) {
-			 if(noteObj.getId().equals(id)) {
-				 session.update(note);
-			 }
-		 }
+		
+		 
+				 session.merge(note);
+			 
+		 
 		 
 		return true;
 	}

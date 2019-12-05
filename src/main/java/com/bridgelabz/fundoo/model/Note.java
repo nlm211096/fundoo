@@ -22,8 +22,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "notes")
-//@EntityListeners(AuditingEntityListener.class)
-//@JsonIgnoreProperties(value = {"createdAt", "updatedAt"}, allowGetters = true)
 public class Note {
 
 	    @Id
@@ -36,16 +34,18 @@ public class Note {
 
 		@Column(name = "content")
 	    private String content;
-
+        
+		private String color;
+		private boolean isArchived;
+		private boolean isPinned;
+		private boolean isTrashed;
+		private LocalDateTime reminedMe;
 	    
-//	    @Temporal(TemporalType.TIMESTAMP)
-//	    @CreatedDate
+
 		@Column(name = "createdAt")
 	    private LocalDateTime createdAt;
 
-	    
-//	    @Temporal(TemporalType.TIMESTAMP)
-//	    @LastModifiedDate
+
 		@Column(name = "updatedAt")
 	    private LocalDateTime updatedAt;
 

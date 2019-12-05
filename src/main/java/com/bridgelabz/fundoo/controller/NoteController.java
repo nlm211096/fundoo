@@ -1,5 +1,6 @@
 package com.bridgelabz.fundoo.controller;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -33,7 +34,7 @@ public class NoteController {
 	
 	
 	@PostMapping("/addnotes")
-	public ResponseEntity<Response> getAllNotes(@Valid @RequestBody AddNotesDto notes)
+	public ResponseEntity<Response> addNotes(@Valid @RequestBody AddNotesDto notes)
 	{
 		
 		Note note=noteService.addNotes(notes);
@@ -66,14 +67,15 @@ public class NoteController {
 	
 	@GetMapping("/update/{id}")
 	public ResponseEntity<Response> updateNote(@PathVariable(name="id") long id,@RequestBody Note noteDetails )
-	{
+	{   System.out.println("update in starting");
 		Note note=noteService.checkById(id);
 		if(note!=null)
 		{
 			note.setContent(noteDetails.getContent());
 			note.setTitle(noteDetails.getTitle());
-			
-		    boolean isUpdated=noteService.updateNote(note);
+			note.setCreatedAt(LocalDateTime.now());
+			note.setUpdatedAt(LocalDateTime.now());
+		    boolean isUpdated=noteService.updateNote(note.getId(),note);
 			if(isUpdated)
 			{
 				return new ResponseEntity<Response>( new Response(HttpStatus.OK.value(), "updation  success"),HttpStatus.OK);

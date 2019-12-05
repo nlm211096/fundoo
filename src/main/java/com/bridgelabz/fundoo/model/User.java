@@ -1,12 +1,16 @@
 package com.bridgelabz.fundoo.model;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -36,6 +40,19 @@ public class User {
 	@Column(name = "isVarified")
 	private Boolean isVarified;
 	
+	@Column(name = "createdStamp",nullable = false)
+	private LocalDateTime createdStamp;
+	
+	@Column(name = "updatedStamp",nullable = false)
+	private LocalDateTime updatedStamp;
+	
+	
+	@OneToMany(targetEntity = Note.class,cascade =CascadeType.ALL,fetch=FetchType.LAZY )
+	@Column(name="id")
+	private List<Note>notes;
+	
+	
+	
 	public Boolean isVarified() {
 		return isVarified;
 	}
@@ -44,11 +61,7 @@ public class User {
 		this.isVarified = isVarified;
 	}
 
-	@Column(name = "createdStamp",nullable = false)
-	private LocalDateTime createdStamp;
 	
-	@Column(name = "updatedStamp",nullable = false)
-	private LocalDateTime updatedStamp;
 
 	public long getId() {
 		return id;

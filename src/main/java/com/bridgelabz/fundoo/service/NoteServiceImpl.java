@@ -37,12 +37,14 @@ public class NoteServiceImpl implements NoteService {
 	@Override
 	public boolean updateNote(long id,Note note) {
 		
+			boolean notes=noteRepo.updateSave(id, note);
+			if(notes)
+			{
+				return true;
+			}
 		
-	boolean notes=noteRepo.updateSave(note);
-	if(notes)
-	{
-		return true;
-	}
+		
+	
 		
 		return false;
 	
@@ -81,7 +83,7 @@ public class NoteServiceImpl implements NoteService {
 			if(id==note.getId())
 			{
 			 notes=new Note();
-			
+			 notes.setId(note.getId());
 			 notes.setContent(note.getContent());
 			 notes.setTitle(note.getTitle());
 			 notes.setUpdatedAt(note.getUpdatedAt());

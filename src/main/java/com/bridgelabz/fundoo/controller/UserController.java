@@ -2,6 +2,7 @@ package com.bridgelabz.fundoo.controller;
 
 import javax.validation.Valid;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,17 +11,19 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bridgelabz.fundoo.dto.LoginDto;
 import com.bridgelabz.fundoo.dto.RegistrationDTO;
+import com.bridgelabz.fundoo.model.Password;
 import com.bridgelabz.fundoo.response.Response;
 import com.bridgelabz.fundoo.service.UserService;
 
 @RestController
 @RequestMapping("/user")
 public class UserController {
-	String str;
+	
 	@Autowired
 	private UserService userService;
 	
@@ -31,10 +34,10 @@ public class UserController {
 			registrationDTO.setPassword("**********");
 			return new ResponseEntity<Response>( new Response(HttpStatus.OK.value(), "Successfully"),HttpStatus.OK);
 		}			
-			
-			
-		return new ResponseEntity<Response>( new Response(HttpStatus.BAD_REQUEST.value(),"success"),HttpStatus.BAD_REQUEST);
-
+		else{
+			return new ResponseEntity<Response>( new Response(HttpStatus.BAD_REQUEST.value(),"email already existed"),HttpStatus.BAD_REQUEST);
+		}
+      
 			
 	}
 	
@@ -70,10 +73,11 @@ public class UserController {
 	
 	@GetMapping("/forgot/{email}")
 	public ResponseEntity<Response> forgotPassword(@PathVariable(name="email")String emailId)
-	{   System.out.println("before valid");
+	{   
 		boolean isValidEmail=userService.validEmailId(emailId);
 		if(isValidEmail)
-		{  str=emailId;
+		{ 
+		
 			return new ResponseEntity<Response>( new Response(HttpStatus.OK.value(),"please check your emailid"),HttpStatus.OK);
 				
 		}
@@ -82,10 +86,13 @@ public class UserController {
 		
 	}
 	
-	@RequestMapping("/resetpassword/{password}")
-	public ResponseEntity<Response> resetPassword(@PathVariable(name="password")String password)
-	{   
-		boolean isReset=userService.resetPassword(password,str);
+	@GetMapping("/reSetPassword/{token}")
+	public ResponseEntity<Response> resetPassword(@Valid @RequestBody Password pass,@PathVariable(name="token")String token)
+			
+	{  
+		System.out.println("controller"+token);
+		
+		boolean isReset=userService.resetPassword(pass.getPassword(),token);
 		if(isReset)
 		{
 			return new ResponseEntity<Response>( new Response(HttpStatus.OK.value(),"you have successfully forget password"),HttpStatus.OK);
