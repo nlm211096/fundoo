@@ -3,6 +3,7 @@ package com.bridgelabz.fundoo.service;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,6 +15,8 @@ import com.bridgelabz.fundoo.config.JwtServiceProvider;
 import com.bridgelabz.fundoo.config.MailServiceProvider;
 import com.bridgelabz.fundoo.dto.LoginDto;
 import com.bridgelabz.fundoo.dto.RegistrationDTO;
+import com.bridgelabz.fundoo.exception.UserAlreadyRegistred;
+import com.bridgelabz.fundoo.exception.UserNotFoundException;
 import com.bridgelabz.fundoo.model.User;
 import com.bridgelabz.fundoo.repo.UserRepo;
 
@@ -22,61 +25,51 @@ import com.bridgelabz.fundoo.repo.UserRepo;
 public class UserServiceImpl implements UserService {
 	@Autowired
 	private MailServiceProvider mailServiceProvider;
-
-	private JwtServiceProvider provider = new JwtServiceProvider();
+    
+	@Autowired
+	private JwtServiceProvider provider ;
 
 	@Autowired
 	private UserRepo userRepo;
+	
+	
+	
 
 	@Autowired
-	private static PasswordEncoder encryptPassword = new BCryptPasswordEncoder();
+	private  PasswordEncoder  passwordEncoder  ;
 
 	@Override
 	public boolean registration(RegistrationDTO registrationDTO) {
-		User user = registrationDTOToUser(registrationDTO);
-		boolean isPresentEmail=validEmailId(user.getEmail());
-		if(isPresentEmail)
+		User users=new User();
+		
+		BeanUtils.copyProperties(registrationDTO, users);
+		User user=userRepo.checkByEmail(users.getEmail());
+	
+		if(user!=null)
 		{
-			return false;
+			throw new UserAlreadyRegistred();
 		}
-		String url = "http://localhost:8080/user/verification/";
-		User userObj = userRepo.save(user);
-		if (userObj != null) {
-
-			String password = user.getPassword();
-			String encryptPassword = encryptPassword(password);
-			user.setPassword(encryptPassword);
-			String emai = user.getEmail();
+		    String url = "http://localhost:8080/user/verification/";
+		    String password = users.getPassword();
+			String encryptPassword = passwordEncoder.encode(password); 
+			users.setPassword(encryptPassword);
+	      	User userss=userRepo.save(users);
+	      	if(userss!=null)
+	      	{	
+			String emai = userss.getEmail();
 			String token = provider.generateToken(emai);
 			mailServiceProvider.sendEmail(registrationDTO.getEmail(), "for authontication", url + token);
 
-			return true;
+		
 		}
 		return false;
 	}
 
-	public User registrationDTOToUser(RegistrationDTO registrationDTO) {
-		User user = new User();
-		user.setFirstname(registrationDTO.getFirstname());
-		user.setLastname(registrationDTO.getLastname());
-		user.setEmail(registrationDTO.getEmail());
-		user.setPhone(registrationDTO.getPhone());
-		user.setPassword(registrationDTO.getPassword());
-		user.setCreatedStamp(LocalDateTime.now());
-		user.setVarified(false);
-		user.setUpdatedStamp(LocalDateTime.now());
 
-		return user;
-
-	}
-
-	private String encryptPassword(String plainTextPassword) {
-
-		return encryptPassword.encode(plainTextPassword);
-
-	}
+	
 
 	@Override
+	
 	public boolean login(LoginDto loginDto) {
 		User user = new User();
 		System.out.println(loginDto.getEmailId() + loginDto.getEmailId());
@@ -90,7 +83,7 @@ public class UserServiceImpl implements UserService {
 
 		}
 
-		return false;
+		throw new UserNotFoundException();
 	}
 
 	@Override
@@ -146,7 +139,7 @@ public class UserServiceImpl implements UserService {
 		for (User user : users) {
 			if(user.getEmail().equals(paresedTokenEmail))
 			{
-			 user.setPassword(encryptPassword(password));
+			// user.setPassword(encryptPassword(password));
 			 userRepo.save(user);
 			 return true;
 			}

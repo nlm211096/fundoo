@@ -1,6 +1,7 @@
 package com.bridgelabz.fundoo.model;
 
 import java.time.LocalDateTime;
+
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -13,6 +14,9 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.springframework.data.auditing.CurrentDateTimeProvider;
+
+import com.bridgelabz.fundoo.dto.RegistrationDTO;
 @Entity
 @Table
 public class User {
@@ -20,7 +24,7 @@ public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id",unique=true ,nullable = false)
-	private long id;
+	private Long id;
 	
 	@Column(name = "firstname",nullable = false)
 	private String firstname;
@@ -41,15 +45,15 @@ public class User {
 	private Boolean isVarified;
 	
 	@Column(name = "createdStamp",nullable = false)
-	private LocalDateTime createdStamp;
+	private LocalDateTime createdStamp = LocalDateTime.now() ;
 	
-	@Column(name = "updatedStamp",nullable = false)
+	@Column(name = "updatedStamp")
 	private LocalDateTime updatedStamp;
 	
 	
-	@OneToMany(targetEntity = Note.class,cascade =CascadeType.ALL,fetch=FetchType.LAZY )
-	@Column(name="id")
-	private List<Note>notes;
+//	@OneToMany(targetEntity = Note.class,cascade =CascadeType.ALL,fetch=FetchType.LAZY )
+//	@Column(name="id")
+//	private List<Note>notes;
 	
 	
 	
@@ -63,13 +67,11 @@ public class User {
 
 	
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
-		this.id = id;
-	}
+	
 
 	public String getFirstname() {
 		return firstname;
@@ -114,6 +116,7 @@ public class User {
 	
 
 	public LocalDateTime getCreatedStamp() {
+		
 		return createdStamp;
 	}
 
@@ -128,5 +131,7 @@ public class User {
 	public void setUpdatedStamp(LocalDateTime updatedStamp) {
 		this.updatedStamp = updatedStamp;
 	}
-
+   
+	
+	
 }

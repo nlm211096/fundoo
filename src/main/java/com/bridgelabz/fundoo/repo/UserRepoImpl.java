@@ -24,9 +24,12 @@ public class UserRepoImpl implements UserRepo {
 	@Override
 	public User save(User user) {
 		Session session = entitymanager.unwrap(Session.class);
-	    session.save(user);
-        System.out.println("hi dao");
-         System.out.println(user.isVarified());
+		session.save(user);
+		Serializable serializable= session.save(user);
+        if(serializable.hashCode()!=0)
+        {
+        	return user;
+        }
          
 	    return user;
 
@@ -39,6 +42,21 @@ public class UserRepoImpl implements UserRepo {
 		  return userList;
 		 }
 
+	 
+	 
+	 
+	 public User checkByEmail(String email) {
+		 
+	Session session = entitymanager.unwrap(Session.class);
+	Query <User> query = session.createQuery("from User where email='"+email+"'", User.class);
+		//User user=session.get(User.class, email);
+		 List<User> users=query.getResultList();
+		 if(users.size()>0)
+		 return (User)users.get(0);
+		 else 
+			 return null;
+	 }
+	 
 	 
 	 
 	@Override

@@ -11,6 +11,7 @@ import com.bridgelabz.fundoo.model.User;
 public interface UserRepo {
 	
 	public User save(User user);
+	 public User checkByEmail(String email);
 	public User checkValidation(User user);
 	 public List< User > findAll() ;
 

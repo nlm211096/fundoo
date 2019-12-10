@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.transaction.Transactional;
 
 import org.hibernate.Session;
 import org.hibernate.query.Query;
@@ -16,7 +17,7 @@ import com.bridgelabz.fundoo.model.User;
 public class NoteRepoImpl implements NoteRepo {
 
 	@Autowired
-	EntityManager entityManager;
+	private EntityManager entityManager;
 	
 	
 	
@@ -36,7 +37,7 @@ public class NoteRepoImpl implements NoteRepo {
 	}
 
 
-
+    @Transactional
 	@Override
 	public boolean deleteNote(long id) {
 		Note notes=null;
