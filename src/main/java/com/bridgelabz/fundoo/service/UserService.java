@@ -6,7 +6,7 @@ import com.bridgelabz.fundoo.model.User;
 
 public interface UserService {
 	
-	public boolean registration(RegistrationDTO registrationDTO);
+	public RegistrationDTO registration(RegistrationDTO registrationDTO);
 	
 	public boolean login(LoginDto loginDto);
 	

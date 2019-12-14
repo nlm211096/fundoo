@@ -2,6 +2,10 @@ package com.bridgelabz.fundoo.dto;
 
 import javax.validation.constraints.NotBlank;
 
+import lombok.Getter;
+import lombok.Setter;
+@Setter
+@Getter
 public class AddNotesDto {
 	
 	    @NotBlank
@@ -10,21 +14,6 @@ public class AddNotesDto {
 	    @NotBlank
 	    private String content;
 
-		public String getTitle() {
-			return title;
-		}
-
-		public void setTitle(String title) {
-			this.title = title;
-		}
-
-		public String getContent() {
-			return content;
-		}
-
-		public void setContent(String content) {
-			this.content = content;
-		}
-
+		
 
 }

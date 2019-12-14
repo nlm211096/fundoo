@@ -21,8 +21,11 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import lombok.Data;
+
 @Entity
 @Table(name = "notes")
+@Data
 public class Note {
 
 	    @Id
@@ -50,46 +53,7 @@ public class Note {
 		@Column(name = "updatedAt")
 	    private LocalDateTime updatedAt;
 
-		public Long getId() {
-			return id;
-		}
-
-		public void setId(Long id) {
-			this.id = id;
-		}
-
-		public String getTitle() {
-			return title;
-		}
-
-		public void setTitle(String title) {
-			this.title = title;
-		}
-
-		public String getContent() {
-			return content;
-		}
-
-		public void setContent(String content) {
-			this.content = content;
-		}
-
-		public LocalDateTime getCreatedAt() {
-			return createdAt;
-		}
-
-		public void setCreatedAt(LocalDateTime createdAt) {
-			this.createdAt = createdAt;
-		}
-
-		public LocalDateTime getUpdatedAt() {
-			return updatedAt;
-		}
-
-		public void setUpdatedAt(LocalDateTime updatedAt) {
-			this.updatedAt = updatedAt;
-		}
-
+		
 	    
 	
 }

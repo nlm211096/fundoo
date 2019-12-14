@@ -12,6 +12,7 @@ public class LoginDto {
 
 	private String emailId;
 	private String password;
+	
 	public String getEmailId() {
 		return emailId;
 	}

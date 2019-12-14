@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bridgelabz.fundoo.dto.LoginDto;
 import com.bridgelabz.fundoo.dto.RegistrationDTO;
 import com.bridgelabz.fundoo.model.Password;
+import com.bridgelabz.fundoo.model.User;
 import com.bridgelabz.fundoo.response.Response;
 import com.bridgelabz.fundoo.service.UserService;
 
@@ -31,13 +32,15 @@ public class UserController {
 	
 	@PostMapping("/register")
 	public ResponseEntity<Response> register(@Valid @RequestBody RegistrationDTO registrationDTO){
-		if(userService.registration(registrationDTO))
+		
+		RegistrationDTO user=(userService.registration(registrationDTO));
+		
+		if(user!=null)
 		{   
-			registrationDTO.setPassword("**********");
-			return new ResponseEntity<Response>( new Response(HttpStatus.OK.value(), "Successfully"),HttpStatus.OK);
+			return new ResponseEntity<Response>( new Response(HttpStatus.OK.value(), "Successfully Registred",user),HttpStatus.OK);
 		}			
 		else{
-			return new ResponseEntity<Response>( new Response(HttpStatus.BAD_REQUEST.value(),"email already existed"),HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Response>( new Response(HttpStatus.BAD_REQUEST.value(),"registration unsuccessfull",user),HttpStatus.BAD_REQUEST);
 		}
       
 			

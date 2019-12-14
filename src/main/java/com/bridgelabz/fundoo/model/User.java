@@ -2,6 +2,7 @@ package com.bridgelabz.fundoo.model;
 
 import java.time.LocalDateTime;
 
+
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -13,16 +14,23 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 import org.springframework.data.auditing.CurrentDateTimeProvider;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.bridgelabz.fundoo.dto.RegistrationDTO;
+
+import lombok.Data;
 @Entity
 @Table
+@Data
 public class User {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(name = "id",unique=true ,nullable = false)
 	private Long id;
 	
@@ -44,6 +52,7 @@ public class User {
 	@Column(name = "isVarified")
 	private Boolean isVarified;
 	
+	//@DateTimeFormat(pattern = "dd/MM/yyyy")
 	@Column(name = "createdStamp",nullable = false)
 	private LocalDateTime createdStamp = LocalDateTime.now() ;
 	
@@ -51,87 +60,12 @@ public class User {
 	private LocalDateTime updatedStamp;
 	
 	
-//	@OneToMany(targetEntity = Note.class,cascade =CascadeType.ALL,fetch=FetchType.LAZY )
-//	@Column(name="id")
-//	private List<Note>notes;
+	@OneToMany(targetEntity = Note.class,cascade =CascadeType.ALL,fetch=FetchType.LAZY )
+	@Column(name="id")
+	private List<Note>notes;
 	
 	
-	
-	public Boolean isVarified() {
-		return isVarified;
-	}
-
-	public void setVarified(Boolean isVarified) {
-		this.isVarified = isVarified;
-	}
 
 	
 
-	public Long getId() {
-		return id;
-	}
-
-	
-
-	public String getFirstname() {
-		return firstname;
-	}
-
-	public void setFirstname(String firstname) {
-		this.firstname = firstname;
-	}
-
-	public String getLastname() {
-		return lastname;
-	}
-
-	public void setLastname(String lastname) {
-		this.lastname = lastname;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public Long getPhone() {
-		return phone;
-	}
-
-	public void setPhone(Long phone) {
-		this.phone = phone;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	
-
-	public LocalDateTime getCreatedStamp() {
-		
-		return createdStamp;
-	}
-
-	public void setCreatedStamp(LocalDateTime createdStamp) {
-		this.createdStamp = createdStamp;
-	}
-
-	public LocalDateTime getUpdatedStamp() {
-		return updatedStamp;
-	}
-
-	public void setUpdatedStamp(LocalDateTime updatedStamp) {
-		this.updatedStamp = updatedStamp;
-	}
-   
-	
-	
 }

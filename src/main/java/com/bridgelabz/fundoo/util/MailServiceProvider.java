@@ -1,6 +1,7 @@
-package com.bridgelabz.fundoo.config;
+package com.bridgelabz.fundoo.util;
 
 import java.util.Properties;
+
 import javax.mail.Authenticator;
 import javax.mail.Message;
 import javax.mail.PasswordAuthentication;
@@ -10,32 +11,65 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
+import org.springframework.beans.factory.annotation.Value;
+
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMailMessage;
+
 
 @Configuration
+@PropertySource("classpath:info.properties")
 public class MailServiceProvider {
 
 	@Autowired
 	private static JavaMailSender javaMailSender;
 	// private static JavaMailSender javaMailSender = new JavaMailSenderImpl();
+	////////Info related Msg
+	@Value("${status}" )
+	String status;
+	
+	@Value("${fromEmail}" )
+	String fromEmail ;
+	
+	@Value("${password}" )
+	String password;
+	
+	@Value("${auth}" )
+	String auth;
+	
+	@Value("${mail.smtp.starttls.enable}")
+	String mail_smtp_starttls_enable;
+	
+	@Value("${host}" )
+	String host;
+	@Value("${smtp.gmail.com}" )
+	String smtp_gmail;
+	
+	@Value("${port}" )
+	String port;
+	
+	@Value("${portNumber}" )
+	String portNumber;
+	
 
 	public MailServiceProvider() {
 
 	}
 
 	public void sendEmail(String toEmail, String subject, String body) {
-
-		String fromEmail = "bridgelab123@gmail.com";
-		String password = "Bridgelab@123";
+        
+		
+		
+//		String fromEmail = "bridgelab123@gmail.com";
+//		String password = "Bridgelab@123";
 
 		Properties prop = new Properties();
-		prop.put("mail.smtp.auth", "true");
-		prop.put("mail.smtp.starttls.enable", "true");
-		prop.put("mail.smtp.host", "smtp.gmail.com");
-		prop.put("mail.smtp.port", "587");
+		//prop.put("mail.smtp.auth", "true");
+		prop.put(auth, status);
+		prop.put(mail_smtp_starttls_enable, status);
+		prop.put(host, smtp_gmail);
+		prop.put(port, portNumber);
 
 		Authenticator auth = new Authenticator()
 		{

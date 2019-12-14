@@ -1,55 +1,27 @@
 package com.bridgelabz.fundoo.dto;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
+import lombok.Data;
+
+@Data
 public class RegistrationDTO {
-
+    
+	@Pattern(regexp="^[a-zA-Z0-9]{3}",message="length must be 3")  
 	private String firstname;
-
+     
+	
+	@Pattern(regexp="^[a-zA-Z0-9]{3}",message="length must be 3")
 	private String lastname;
-
+    
+	@Email
 	private String email;
 
 	private Long phone;
 
 	private String password;
 
-	public String getFirstname() {
-		return firstname;
-	}
-
-	public void setFirstname(String firstname) {
-		this.firstname = firstname;
-	}
-
-	public String getLastname() {
-		return lastname;
-	}
-
-	public void setLastname(String lastname) {
-		this.lastname = lastname;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public Long getPhone() {
-		return phone;
-	}
-
-	public void setPhone(Long phone) {
-		this.phone = phone;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
+	
 }

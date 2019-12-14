@@ -1,16 +1,17 @@
 package com.bridgelabz.fundoo.repo;
 
 import java.io.Serializable;
+ 
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
+
 
 
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +24,7 @@ public class UserRepoImpl implements UserRepo {
 
 	@Override
 	public User save(User user) {
+		
 		Session session = entitymanager.unwrap(Session.class);
 		session.save(user);
 		Serializable serializable= session.save(user);
@@ -45,7 +47,7 @@ public class UserRepoImpl implements UserRepo {
 	 
 	 
 	 
-	 public User checkByEmail(String email) {
+ public User checkByEmail(String email) {
 		 
 	Session session = entitymanager.unwrap(Session.class);
 	Query <User> query = session.createQuery("from User where email='"+email+"'", User.class);

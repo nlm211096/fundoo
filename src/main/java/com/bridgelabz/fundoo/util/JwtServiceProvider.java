@@ -1,16 +1,21 @@
-package com.bridgelabz.fundoo.config;
+package com.bridgelabz.fundoo.util;
+
+import org.springframework.beans.factory.annotation.Value;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 @Component
 @Configuration
+@PropertySource("classpath:info.properties")
 public class JwtServiceProvider {
-	
-	private final long expTime = 9000;
-	private final String secret = "neelam";
+	@Value("${expTime}")
+	private long expTime;
+	@Value("${secret}")
+	private String secret ;
 
 	public String generateToken(String emailId) {
 	return JWT.create().withClaim("email", emailId).sign(Algorithm.HMAC512(secret));

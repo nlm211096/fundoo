@@ -5,6 +5,7 @@ package com.bridgelabz.fundoo.service;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +25,8 @@ public class NoteServiceImpl implements NoteService {
 	@Override
 	public Note addNotes(AddNotesDto noteDto) {
 		
-	Note note=addAllNote(noteDto);
+		Note note=new Note();
+		BeanUtils.copyProperties(noteDto, note);
 	boolean result=noteRepo.saveNote(note);
 	if(result)
 	{
@@ -63,16 +65,7 @@ public class NoteServiceImpl implements NoteService {
 		
 	}
    
-	public Note addAllNote(AddNotesDto noteDto)
-	{
-		Note note=new Note();
-		note.setContent(noteDto.getContent());
-		note.setTitle(noteDto.getTitle());
-		note.setCreatedAt(LocalDateTime.now());
-		note.setUpdatedAt(LocalDateTime.now());
-		
-		return note;
-	}
+
 
 	@Override
 	public Note checkById(long id) {

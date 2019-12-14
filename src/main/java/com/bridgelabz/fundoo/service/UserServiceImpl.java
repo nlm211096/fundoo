@@ -11,18 +11,20 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
-import com.bridgelabz.fundoo.config.JwtServiceProvider;
-import com.bridgelabz.fundoo.config.MailServiceProvider;
 import com.bridgelabz.fundoo.dto.LoginDto;
 import com.bridgelabz.fundoo.dto.RegistrationDTO;
 import com.bridgelabz.fundoo.exception.UserAlreadyRegistred;
 import com.bridgelabz.fundoo.exception.UserNotFoundException;
 import com.bridgelabz.fundoo.model.User;
 import com.bridgelabz.fundoo.repo.UserRepo;
+import com.bridgelabz.fundoo.util.JwtServiceProvider;
+import com.bridgelabz.fundoo.util.MailServiceProvider;
 
 @Service
 @Transactional
 public class UserServiceImpl implements UserService {
+	
+	
 	@Autowired
 	private MailServiceProvider mailServiceProvider;
     
@@ -39,7 +41,7 @@ public class UserServiceImpl implements UserService {
 	private  PasswordEncoder  passwordEncoder  ;
 
 	@Override
-	public boolean registration(RegistrationDTO registrationDTO) {
+	public RegistrationDTO registration(RegistrationDTO registrationDTO) {
 		User users=new User();
 		
 		BeanUtils.copyProperties(registrationDTO, users);
@@ -58,18 +60,24 @@ public class UserServiceImpl implements UserService {
 	      	{	
 			String emai = userss.getEmail();
 			String token = provider.generateToken(emai);
-			mailServiceProvider.sendEmail(registrationDTO.getEmail(), "for authontication", url + token);
+			
+		    mailServiceProvider.sendEmail(registrationDTO.getEmail(), "for authontication", url + token);
+		    userss.setPassword("***********");
 
+             BeanUtils.copyProperties(userss, registrationDTO);
+             
+		    
+            return registrationDTO;
+	      	}
+	      	
+	      	return null;
 		
-		}
-		return false;
 	}
 
 
 	
 
 	@Override
-	
 	public boolean login(LoginDto loginDto) {
 		User user = new User();
 		System.out.println(loginDto.getEmailId() + loginDto.getEmailId());
@@ -77,7 +85,7 @@ public class UserServiceImpl implements UserService {
 		user.setPassword(loginDto.getPassword());
 		User result = userRepo.checkValidation(user);
 		if (result != null) {
-			if (user.isVarified()) {
+			if (user.getIsVarified()) {
 				return true;
 			}
 
@@ -93,10 +101,10 @@ public class UserServiceImpl implements UserService {
 		String paresedToken = provider.parseToken(token);
 		for (User use : user) {
 			String email = use.getEmail();
-			if (email.equals(paresedToken) && (use.isVarified() == false)) {
+			if (email.equals(paresedToken) && (use.getIsVarified() == false)) {
 				Boolean t = true;
 
-				use.setVarified(t);
+				use.setIsVarified(t);
 				userRepo.save(use);
 				return true;
 			} else {
