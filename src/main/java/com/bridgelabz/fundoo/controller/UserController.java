@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,7 +25,8 @@ import com.bridgelabz.fundoo.response.Response;
 import com.bridgelabz.fundoo.service.UserService;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
+//@CrossOrigin(origins = "http://localhost:4200")
 public class UserController {
 	
 	@Autowired
@@ -37,7 +39,7 @@ public class UserController {
 		
 		if(user!=null)
 		{   
-			return new ResponseEntity<Response>( new Response(HttpStatus.OK.value(), "Successfully Registred",user),HttpStatus.OK);
+			return new ResponseEntity<Response>( new Response(HttpStatus.OK.value(), "please verify your email",user),HttpStatus.OK);
 		}			
 		else{
 			return new ResponseEntity<Response>( new Response(HttpStatus.BAD_REQUEST.value(),"registration unsuccessfull",user),HttpStatus.BAD_REQUEST);
@@ -47,9 +49,11 @@ public class UserController {
 	}
 	
 	
-	@GetMapping("/login")
+	@PostMapping("/login")
 	public ResponseEntity<Response> login(@Valid @RequestBody LoginDto logindto)
+	
 	{
+		System.out.println(logindto.getEmailId());
 		if(userService.login(logindto))
 		{
 			return new ResponseEntity<Response>( new Response(HttpStatus.OK.value(),"success"),HttpStatus.OK);

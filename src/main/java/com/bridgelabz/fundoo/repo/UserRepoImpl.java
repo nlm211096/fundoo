@@ -1,7 +1,7 @@
 package com.bridgelabz.fundoo.repo;
 
 import java.io.Serializable;
- 
+import java.sql.SQLException;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -9,6 +9,7 @@ import javax.persistence.EntityManager;
 
 
 import org.hibernate.Session;
+import org.hibernate.engine.jdbc.spi.SqlExceptionHelper;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -46,34 +47,38 @@ public class UserRepoImpl implements UserRepo {
 
 	 
 	 
-	 
- public User checkByEmail(String email) {
-		 
+ public User checkByEmail(String email)throws SQLException {
+	System.out.println();
+
 	Session session = entitymanager.unwrap(Session.class);
-	Query <User> query = session.createQuery("from User where email='"+email+"'", User.class);
-		//User user=session.get(User.class, email);
-		 List<User> users=query.getResultList();
-		 if(users.size()>0)
-		 return (User)users.get(0);
-		 else 
-			 return null;
-	 }
-	 
-	 
-	 
-	@Override
-	public User checkValidation(User user) {
+	Query query = session.createQuery("from User where email='"+email+"'");
+	query.setParameter("email", email);
+	return (User) query.uniqueResult();
 	
-		List<User> users=findAll();
-		for(User userss:users)
-		{
-			if((userss.getEmail()).equals(user.getEmail())&&userss.getPassword().equals(user.getPassword()))
-			{
-				return user;
-			}
-		}
-		
-		return null;
-	}
+	 }
+ 
+// 
+//@Override
+//public User checkValidation(User user) {
+//	// TODO Auto-generated method stub
+//	return null;
+//}
+	 
+	 
+//	 
+//	@Override
+//	public User checkValidation(User user) {
+//	
+//		List<User> users=findAll();
+//		for(User userss:users)
+//		{
+//			if((userss.getEmail()).equals(user.getEmail())&&userss.getPassword().equals(user.getPassword()))
+//			{
+//				return user;
+//			}
+//		}
+//		
+//		return null;
+//	}
 
 }

@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class GeneralException {
 	
-	@ExceptionHandler(value=UserNotFoundException.class)
-	public ResponseEntity<Object>getUserAuthentication(Exception e)
+	@ExceptionHandler(value=UserException.class)
+	public ResponseEntity<Object>getUserAuthentication(UserException e)
 	{
 		return new ResponseEntity<>(e.getMessage(),HttpStatus.UNAUTHORIZED);
 		
@@ -26,6 +26,11 @@ public class GeneralException {
 	public ResponseEntity<Object>userRegistrationException(Exception e)
 	{
 		return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+		
+	}
+	public ResponseEntity<Object>EmailNotFoundException(Exception e)
+	{
+		return new ResponseEntity<>(e.getMessage(),HttpStatus.UNAUTHORIZED);
 		
 	}
 

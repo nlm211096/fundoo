@@ -49,8 +49,8 @@ public class User {
 	@Column(name = "password",nullable = false)
 	private String password;
 	
-	@Column(name = "isVarified")
-	private Boolean isVarified;
+	@Column(name = "verify")
+	private boolean verify;
 	
 	//@DateTimeFormat(pattern = "dd/MM/yyyy")
 	@Column(name = "createdStamp",nullable = false)

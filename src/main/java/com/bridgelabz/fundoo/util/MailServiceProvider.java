@@ -2,6 +2,7 @@ package com.bridgelabz.fundoo.util;
 
 import java.util.Properties;
 
+
 import javax.mail.Authenticator;
 import javax.mail.Message;
 import javax.mail.PasswordAuthentication;

@@ -20,7 +20,7 @@ public class Response {
 	public Response(int status, String description) {
 		this.status = status;
 		this.description = description;
-		this.data=data;
+		
 	}
 	
 
