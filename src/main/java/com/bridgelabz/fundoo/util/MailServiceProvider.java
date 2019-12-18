@@ -30,11 +30,14 @@ public class MailServiceProvider {
 	@Value("${status}" )
 	String status;
 	
-	@Value("${fromEmail}" )
-	String fromEmail ;
-	
-	@Value("${password}" )
-	String password;
+//	@Value("${fromEmail}" )
+//	String fromEmail ;
+//	
+//	@Value("${password}" )
+//	String password;
+//	
+	String fromEmail=System.getenv("fromEmail");
+	String password=System.getenv("password");
 	
 	@Value("${auth}" )
 	String auth;

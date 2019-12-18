@@ -37,7 +37,7 @@ public class UserRepoImpl implements UserRepo {
 	    return user;
 
 	}
-	
+	 @Override
 	 public List< User > findAll() {
 		 Session session=entitymanager.unwrap(Session.class);
 		  Query <User> query = session.createQuery("from User", User.class);
@@ -47,13 +47,19 @@ public class UserRepoImpl implements UserRepo {
 
 	 
 	 
- public User checkByEmail(String email)throws SQLException {
+ public User checkByEmail(String email){
 	System.out.println();
 
 	Session session = entitymanager.unwrap(Session.class);
-	Query query = session.createQuery("from User where email='"+email+"'");
+	Query query = session.createQuery("from User where email=:email");
 	query.setParameter("email", email);
-	return (User) query.uniqueResult();
+	
+	User user=(User) query.uniqueResult();
+	if(user==null)
+	{
+		return null;
+	}
+	return user;
 	
 	 }
  

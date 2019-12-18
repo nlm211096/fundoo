@@ -1,5 +1,8 @@
 package com.bridgelabz.fundoo.controller;
 
+import java.sql.SQLException;
+import java.util.List;
+
 import javax.validation.Valid;
 
 
@@ -35,7 +38,7 @@ public class UserController {
 	@PostMapping("/register")
 	public ResponseEntity<Response> register(@Valid @RequestBody RegistrationDTO registrationDTO){
 		
-		RegistrationDTO user=(userService.registration(registrationDTO));
+		User user=(userService.registration(registrationDTO));
 		
 		if(user!=null)
 		{   
@@ -50,11 +53,10 @@ public class UserController {
 	
 	
 	@PostMapping("/login")
-	public ResponseEntity<Response> login(@Valid @RequestBody LoginDto logindto)
-	
-	{
-		System.out.println(logindto.getEmailId());
-		if(userService.login(logindto))
+	public ResponseEntity<Response> login(@Valid @RequestBody LoginDto logindto) 
+	{    
+		User user=userService.login(logindto);
+		if(user!=null)
 		{
 			return new ResponseEntity<Response>( new Response(HttpStatus.OK.value(),"success"),HttpStatus.OK);
 				
@@ -66,6 +68,13 @@ public class UserController {
 	}
 	
 	
+	@GetMapping("/read")
+	public ResponseEntity<Response> getAllUser()
+	{   
+		List<User>users=userService.getAllUser();                                                                                                                               
+		
+		return new  ResponseEntity<Response>(new Response(HttpStatus.OK.value(),"all users are:",users),HttpStatus.OK);
+	}
 	
 	
 	

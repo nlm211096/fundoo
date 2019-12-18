@@ -44,28 +44,22 @@ public class UserServiceImpl implements UserService {
 
 	@Value("${verifyException}")
 	String verifyException;
+	
+	@Value("${emailExistence}")
+	String emailExistence;
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
 	@Override
-	public RegistrationDTO registration(RegistrationDTO registrationDTO) {
+	public User registration(RegistrationDTO registrationDTO) {
 		User users = new User();
 
 		BeanUtils.copyProperties(registrationDTO, users);
-		try {
-			
 			User user = userRepo.checkByEmail(users.getEmail());
-			if (user != null) {
-				System.out.print("exist");
+			if (user!=null) {
+				throw new UserException(emailExistence);
 			}
-			
-		}catch (Exception e) {
-			throw new UserException(emailException);
-		}
-		
-
-		
 		String url = "http://localhost:8080/users/verification/";
 		String password = users.getPassword();
 		String encryptPassword = passwordEncoder.encode(password);
@@ -77,27 +71,23 @@ public class UserServiceImpl implements UserService {
 
 			mailServiceProvider.sendEmail(registrationDTO.getEmail(), "for authontication", url + token);
 
-			BeanUtils.copyProperties(userss, registrationDTO);
-
-			return registrationDTO;
+			
 		}
+		return userss;
 
-		return null;
-
+		
 	}
 
-	@SuppressWarnings("unused")
+	//@SuppressWarnings("unused")
 	@Override
-	public boolean login(LoginDto loginDto) throws SQLException {
+	public User login(LoginDto loginDto) {
 		String encryptPassword = passwordEncoder.encode((loginDto.getPassword()));
 		User user = userRepo.checkByEmail(loginDto.getEmailId());
-		System.out.println("email111:" + user.getEmail());
-		boolean s = user.isVerify();
-		System.out.println("email==" + s);
+	   
 		if (user != null) {
 			if (user.isVerify()) {
 				if (user.getPassword().equals(encryptPassword)) {
-					return true;
+					return user;
 				} else {
 					throw new UserException(passwordException);
 				}
@@ -123,20 +113,43 @@ public class UserServiceImpl implements UserService {
 		return false;
 
 	}
-
+  
+	
+	public boolean validEmailId(String email)
+	{   
+		User user = userRepo.checkByEmail(email);
+		if(user==null)
+		{
+			return false;
+		}
+		
+		return true;
+		
+	}
+	
+	
 	@Override
 	public boolean resetPassword(String password, String token) {
 		System.out.println(token);
 		String paresedTokenEmail = provider.parseToken(token);
-		List<User> users = userRepo.findAll();
-		for (User user : users) {
-			if (user.getEmail().equals(paresedTokenEmail)) {
-				// user.setPassword(encryptPassword(password));
-				userRepo.save(user);
-				return true;
-			}
+		User user=userRepo.checkByEmail(paresedTokenEmail);
+		user.setPassword(password);
+		User use=userRepo.save(user);
+		if(use==null)
+		{
+			
+		
+		return false;
 
 		}
-		return false;
+		return true;
+	}
+
+	@Override
+	public List<User> getAllUser() {
+	
+		userRepo.findAll();
+		
+				return null;
 	}
 }

@@ -1,6 +1,7 @@
 package com.bridgelabz.fundoo.exception;
 
 import lombok.Getter;
+
 import lombok.Setter;
 
 @Getter
@@ -15,6 +16,7 @@ public class UserException extends RuntimeException{
 	    super(message);
 	    this.message=message;
 	}
+	
 	
 	
 	
