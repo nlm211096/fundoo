@@ -63,6 +63,19 @@ public class UserRepoImpl implements UserRepo {
 	
 	 }
  
+ public User checById(Long userId)
+ {
+	 Session session = entitymanager.unwrap(Session.class);
+		Query query = session.createQuery("from User where userId=:userId");
+		query.setParameter("userId", userId);
+		User user=(User) query.uniqueResult();
+		if(user!=null)
+		{
+			return user;
+		}
+		return null;
+ }
+ 
 // 
 //@Override
 //public User checkValidation(User user) {

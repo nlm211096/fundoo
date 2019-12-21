@@ -55,12 +55,12 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
+
 	@Autowired
 	SendMail sendMail;
-	
 
-	String fromEmail=System.getenv("fromEmail");
-	String password=System.getenv("password");
+	String fromEmail = System.getenv("fromEmail");
+	String password = System.getenv("password");
 
 	@Override
 	public User registration(RegistrationDTO registrationDTO) {
@@ -72,24 +72,25 @@ public class UserServiceImpl implements UserService {
 			throw new UserException(emailExistence);
 		}
 		String url = "http://localhost:8080/users/verification/";
-		String password = users.getPassword();
-		String encryptPassword = passwordEncoder.encode(password);
+
+		String encryptPassword = passwordEncoder.encode(users.getPassword());
 		users.setPassword(encryptPassword);
 		User userss = userRepo.save(users);
 		if (userss != null) {
-			String emai = userss.getEmail();
-			String token = provider.generateToken(emai);
-			
-			Mail mail=new Mail(fromEmail,password,"neelam",emai+token);
-			
+
+			String token = provider.generateToken(userss.getUserId());
+
+			Mail mail = new Mail(fromEmail, userss.getEmail(), "neelam", url + token);
+
 			sendMail.sendSimpleMessage(mail);
 //			RabbitMqSender message = new RabbitMqSender();
 //			message.setEmail(emai);
 //			message.setLink("for Authorization");
 //			message.setToken(url+token);
-		//	mailServiceProvider.rabitMailSend(message);
-			
-			//mailServiceProvider.sendEmail(registrationDTO.getEmail(), "for authontication", url + token);
+			// mailServiceProvider.rabitMailSend(message);
+
+			// mailServiceProvider.sendEmail(registrationDTO.getEmail(), "for
+			// authontication", url + token);
 
 		}
 		return userss;
@@ -97,15 +98,23 @@ public class UserServiceImpl implements UserService {
 	}
 
 	// @SuppressWarnings("unused")
+	
+	
 	@Override
-	public User login(LoginDto loginDto) {
-		String encryptPassword = passwordEncoder.encode((loginDto.getPassword()));
-		User user = userRepo.checkByEmail(loginDto.getEmailId());
+	public String login(LoginDto loginDto) {
 
+		
+		
+		
+		User user = userRepo.checkByEmail(loginDto.getEmailId());
+		boolean encryptPassword = passwordEncoder.matches(loginDto.getPassword(), user.getPassword());
+
+		
 		if (user != null) {
 			if (user.isVerify()) {
-				if (user.getPassword().equals(encryptPassword)) {
-					return user;
+				if (encryptPassword) {
+					String token = provider.generateToken(user.getUserId());
+					return token;
 				} else {
 					throw new UserException(passwordException);
 				}
@@ -120,8 +129,8 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public boolean verify(String token) {
-		String email = provider.parseToken(token);
-		User user = userRepo.checkByEmail(email);
+		Long userId = provider.parseToken(token);
+		User user = userRepo.checById(userId);
 		user.setVerify(true);
 		User users = userRepo.save(user);
 
@@ -145,8 +154,8 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public boolean resetPassword(String password, String token) {
 		System.out.println(token);
-		String paresedTokenEmail = provider.parseToken(token);
-		User user = userRepo.checkByEmail(paresedTokenEmail);
+		Long paresedUserId = provider.parseToken(token);
+		User user = userRepo.checById(paresedUserId);
 		user.setPassword(password);
 		User use = userRepo.save(user);
 		if (use == null) {
@@ -165,5 +174,4 @@ public class UserServiceImpl implements UserService {
 		return null;
 	}
 
-	
 }

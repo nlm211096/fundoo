@@ -11,7 +11,7 @@ public interface UserService {
 	
 	public User registration(RegistrationDTO registrationDTO);
 	
-	public User login(LoginDto loginDto) ;
+	public String login(LoginDto loginDto) ;
 	
 	public boolean verify(String token);
 	

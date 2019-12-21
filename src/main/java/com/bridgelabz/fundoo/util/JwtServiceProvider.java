@@ -17,13 +17,13 @@ public class JwtServiceProvider {
 	@Value("${secret}")
 	private String secret ;
 
-	public String generateToken(String emailId) {
-	return JWT.create().withClaim("email", emailId).sign(Algorithm.HMAC512(secret));
+	public String generateToken(Long userId) {
+	return JWT.create().withClaim("userId", userId).sign(Algorithm.HMAC512(secret));
 	}
 
-	public String parseToken(String token) {
+	public Long parseToken(String token) {
 	
-	return JWT.require(Algorithm.HMAC512(secret)).build().verify(token).getClaim("email").asString();
+	return JWT.require(Algorithm.HMAC512(secret)).build().verify(token).getClaim("userId").asLong();
 	}
 
 }

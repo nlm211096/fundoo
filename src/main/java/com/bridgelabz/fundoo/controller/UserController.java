@@ -55,10 +55,10 @@ public class UserController {
 	@PostMapping("/login")
 	public ResponseEntity<Response> login(@Valid @RequestBody LoginDto logindto) 
 	{    
-		User user=userService.login(logindto);
+		String user=userService.login(logindto);
 		if(user!=null)
 		{
-			return new ResponseEntity<Response>( new Response(HttpStatus.OK.value(),"success"),HttpStatus.OK);
+			return new ResponseEntity<Response>( new Response(HttpStatus.OK.value(),user),HttpStatus.OK);
 				
 		}
 		return new ResponseEntity<Response>( new Response(HttpStatus.BAD_REQUEST.value(),"not authorized"),HttpStatus.BAD_REQUEST);

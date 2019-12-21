@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,10 +35,10 @@ public class NoteController {
 	
 	
 	@PostMapping("/addnotes")
-	public ResponseEntity<Response> addNotes(@Valid @RequestBody AddNotesDto notes)
+	public ResponseEntity<Response> addNotes(@RequestHeader String token ,@RequestBody AddNotesDto notes)
 	{
 		
-		Note note=noteService.addNotes(notes);
+		Note note=noteService.addNotes(token,notes);
 		if(note!=null)
 		{
 			
@@ -46,7 +47,7 @@ public class NoteController {
 		
 		
 		
-		return new ResponseEntity<Response>( new Response(HttpStatus.BAD_REQUEST.value(),"not success"),HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<Response>( new Response(HttpStatus.BAD_REQUEST.value(),"user id not exist"),HttpStatus.BAD_REQUEST);
 
 	}
 	
@@ -66,16 +67,16 @@ public class NoteController {
 	}
 	
 	@GetMapping("/update/{id}")
-	public ResponseEntity<Response> updateNote(@PathVariable(name="id") long id,@RequestBody Note noteDetails )
-	{   System.out.println("update in starting");
-		Note note=noteService.checkById(id);
-		if(note!=null)
+	public ResponseEntity<Response> updateNote(@RequestHeader String token,@RequestBody AddNotesDto addNotesDto )
+	{ 
+		boolean note=noteService.updateNote(token, addNotesDto);
+		if(note)
 		{
 			note.setContent(noteDetails.getContent());
 			note.setTitle(noteDetails.getTitle());
 			note.setCreatedAt(LocalDateTime.now());
 			note.setUpdatedAt(LocalDateTime.now());
-		    boolean isUpdated=noteService.updateNote(note.getId(),note);
+		    boolean isUpdated=noteService.updateNote(note.getNoteId(),note);
 			if(isUpdated)
 			{
 				return new ResponseEntity<Response>( new Response(HttpStatus.OK.value(), "updation  success"),HttpStatus.OK);

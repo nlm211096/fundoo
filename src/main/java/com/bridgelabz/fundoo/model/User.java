@@ -12,6 +12,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
@@ -31,8 +32,8 @@ public class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	@Column(name = "id",unique=true ,nullable = false)
-	private Long id;
+	@Column(name = "userId",unique=true ,nullable = false)
+	private Long userId;
 	
 	@Column(name = "firstname",nullable = false)
 	private String firstname;
@@ -61,7 +62,7 @@ public class User {
 	
 	
 	@OneToMany(targetEntity = Note.class,cascade =CascadeType.ALL,fetch=FetchType.LAZY )
-	@Column(name="id")
+	@JoinColumn(name="user_id")
 	private List<Note>notes;
 	
 	

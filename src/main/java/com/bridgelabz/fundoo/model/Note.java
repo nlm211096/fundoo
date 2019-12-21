@@ -30,8 +30,8 @@ public class Note {
 
 	    @Id
 	    @GeneratedValue(strategy = GenerationType.IDENTITY)
-	    @Column(name = "id",unique=true ,nullable = false)
-	    private Long id;
+	    @Column(name = "noteId",unique=true ,nullable = false)
+	    private Long noteId;
 
 		@Column(name = "title")
 	    private String title;
